@@ -1,0 +1,45 @@
+import java.math.BigInteger;
+class RSA
+{
+public static void main(String args[])
+{
+int msg = 420;
+int p = 17;
+int q = 31;
+int n = p * q;
+int z = (p - 1) * (q - 1);
+int e;
+for (e = 2; e < z; e++)
+if (gcd(e, z) == 1)
+break;
+int d = 0;
+for (int i=0; i<9; i++) {
+int x = i*z + 1;
+if (x % e == 0) {
+d = x / e;
+break;
+}
+}
+long c = (long)Math.pow(msg, e) % n;
+// We need BigInteger for very large numbers here
+BigInteger C = BigInteger.valueOf(c);
+BigInteger N = BigInteger.valueOf(n);
+BigInteger D = BigInteger.valueOf(d);
+BigInteger decrypted = C.modPow(D, N);
+System.out.println("Value of P: " + p);
+System.out.println("Value of Q: " + q);
+System.out.println("Value of z: " + z);
+System.out.println("Value of E: " + e);
+System.out.println("Value of D: " + d);
+System.out.println("Input Message: " + msg);
+System.out.println("Encrypted Message: " + c);
+System.out.println("Decrypted message: " + decrypted);
+}
+static int gcd(int e, int z)
+{
+if (e == 0)
+return z;
+else
+return gcd(z%e, e);
+}
+}
