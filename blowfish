@@ -1,0 +1,23 @@
+import javax.crypto.*;
+import javax.crypto.spec.*;
+public class  Main{
+    public static void main (String[] args) throws Exception{
+        KeyGenerator kg= KeyGenerator.getInstance("BLOWFISH");
+        String message="hello";
+        SecretKey sk=kg.generateKey();
+        byte[] raw=sk.getEncoded();
+        SecretKeySpec skpec=new SecretKeySpec(raw,"Blowfish");
+        Cipher c=Cipher.getInstance("Blowfish");
+        
+        c.init(Cipher.ENCRYPT_MODE,skpec);
+        byte[] enc=c.doFinal(message.getBytes());
+        
+        c.init(Cipher.DECRYPT_MODE,skpec);
+        byte[] dec=c.doFinal(enc);
+        
+       
+        String d=new String(dec);
+        System.out.println("encrypted text is "+enc);
+        System.out.println("decrypted text is "+d);
+    }
+}
