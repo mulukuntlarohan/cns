@@ -1,5 +1,4 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.*;
 import java.security.spec.KeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -7,21 +6,21 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import java.util.Base64;
 public class DES {
-    private static final String UNICODE_FORMAT = "UTF8";
-    public static final String DESEDE_ENCRYPTION_SCHEME = "DESede";
+    private static final String form = "UTF8";
+    public static final String des = "DESede";
     private SecretKey key;
-    private Cipher cipher;
-    public DES(String encryptionKey) throws Exception {
-        KeySpec myKeySpec = new DESedeKeySpec(encryptionKey.getBytes(UNICODE_FORMAT));
-        SecretKeyFactory mySecretKeyFactory = SecretKeyFactory.getInstance(DESEDE_ENCRYPTION_SCHEME);
-        cipher = Cipher.getInstance(DESEDE_ENCRYPTION_SCHEME);
-        key = mySecretKeyFactory.generateSecret(myKeySpec);
+    private Cipher c;
+    public DES(String ekey) throws Exception {
+        KeySpec ks = new DESedeKeySpec(ekey.getBytes(form));
+        SecretKeyFactory skf = SecretKeyFactory.getInstance(des);
+        c = Cipher.getInstance(des);
+        key = skf.generateSecret(ks);
     }
-    public String encrypt(String unencryptedString) {
+    public String encrypt(String text) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            byte[] plainText = unencryptedString.getBytes(UNICODE_FORMAT);
-            byte[] encryptedText = cipher.doFinal(plainText);
+            c.init(Cipher.ENCRYPT_MODE, key);
+            byte[] plainText = text.getBytes(form);
+            byte[] encryptedText = c.doFinal(plainText);
             return Base64.getEncoder().encodeToString(encryptedText);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,24 +29,23 @@ public class DES {
     }
     public String decrypt(String encryptedString) {
         try {
-            cipher.init(Cipher.DECRYPT_MODE, key);
+            c.init(Cipher.DECRYPT_MODE, key);
             byte[] encryptedText = Base64.getDecoder().decode(encryptedString);
-            byte[] plainText = cipher.doFinal(encryptedText);
-            return new String(plainText, UNICODE_FORMAT);
+            byte[] plainText = c.doFinal(encryptedText);
+            return new String(plainText, form);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
     public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Scanner sc=new Scanner(System.in);
         System.out.print("Enter the string: ");
+        String stringToEncrypt = sc.next();
         String encryptionKey = "ThisIsSecretEncryptionKey";
         DES myEncryptor = new DES(encryptionKey);
-        String stringToEncrypt = br.readLine();
         String encrypted = myEncryptor.encrypt(stringToEncrypt);
         String decrypted = myEncryptor.decrypt(encrypted);
-        System.out.println("\nString To Encrypt: " + stringToEncrypt);
         System.out.println("Encrypted Value : " + encrypted);
         System.out.println("Decrypted Value : " + decrypted);
         System.out.println("");
