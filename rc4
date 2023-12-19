@@ -1,27 +1,85 @@
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-public class RC4 {
-public static void main(String[] args)
-throws Exception
+import java.util.Scanner;
+public class Main
 {
-String message = "This is my input string";
-String key = "I am a key";
-System.out.println("Input: " + message);
-System.out.println("Key: " + key);
-SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "RC4");
-// Instantiate the cipher
-Cipher cipher = Cipher.getInstance("RC4");
-cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-// Encryption
-byte[] cipherText = cipher.doFinal(message.getBytes());
-String cipherString = new String(cipherText);
-System.out.println("Encrypted String: " + cipherString);
-// Decryption
-cipher.init(Cipher.DECRYPT_MODE, keySpec);
-byte[] original = cipher.doFinal(cipherText);
-String originalString = new String(original);
-System.out.println("Decrypted: " + originalString);
-}
-}
+	public static void main(String[] args) 
+	{
+	    int[] K=new int[4];
+	    int[] S=new int[256];
+	    int[] T=new int[256];
+	    Scanner sc=new Scanner(System.in);
+		System.out.println("Enter Key");
+		for(int i=0;i<4;i++){
+		    K[i]=sc.nextInt();
+		} 
+		//initialization of S array and T array
+		for(int i=0;i<255;i++){
+		    S[i]=i;
+		    T[i]=K[i%4];
+		}
+		int j=0;
+		//permutation of S array
+		for(int i=0;i<255;i++){
+		    j = (j + S[i] + T[i]) % 256;
+		    int temp=S[i];
+		    S[i]=S[j];
+		    S[j]=temp;
+		}
+		/* Stream Generation */
+ 
+		int i=0;
+		j=0;
+		int t,k;
+		int c=0;
+		int[] pt={1,2,2,2};
+		int[] encr=new int[4];
+		while (c<4){
+			i = (i + 1)%256;
+			j = (j + S[i]) % 256;
+			int temp=S[i];
+			S[i]=S[j];
+			S[j]=temp;
+			t = (S[i] + S[j]) % 256;
+			k = S[t];
+			encr[c]=pt[c]^k;
+			c++;
+			
+		}
+		for( i=0;i<4;i++){
+			System.out.print(encr[i]+" ");
+		}
+
+		System.out.println();
+		for( i=0;i<255;i++){
+			S[i]=i;
+			T[i]=K[i%4];
+		}
+		j=0;
+		//	permutation of S array
+		for( i=0;i<255;i++){
+			j = (j + S[i] + T[i]) % 256;
+			int temp=S[i];
+			S[i]=S[j];
+			S[j]=temp;
+		}
+		i=0;
+		j=0;
+		t=0;
+		k=0;
+		c=0;
+		int[] decr=new int[4];
+		while (c<4){
+			i = (i + 1)%256;
+			j = (j + S[i]) % 256;
+			int temp=S[i];
+			S[i]=S[j];
+			S[j]=temp;
+			t = (S[i] + S[j]) % 256;
+			k = S[t];
+			decr[c]=encr[c]^k;
+			c++;
+		}
+		for( i=0;i<4;i++)
+			System.out.print(decr[i]+" ");
+		}
+	
+	}
