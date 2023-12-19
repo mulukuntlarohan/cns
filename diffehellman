@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Diffie Hellman</title>
+<style>
+</style>
+<script>
+function deff(){
+let p = document.getElementById("p").value;
+let g = document.getElementById("q").value;
+let a = document.getElementById("pka").value;
+let b = document.getElementById("pkb").value;
+let x = Math.pow(g,a)%p;
+let y = Math.pow(g,b)%p;
+let ka = Math.pow(y,a)%p;
+let kb = Math.pow(x,b)%p;
+document.getElementById("output1").innerHTML = x;
+document.getElementById("output2").innerHTML = y;
+document.getElementById("output3").innerHTML = ka;
+document.getElementById("output4").innerHTML = kb;
+}
+</script>
+</head>
+<body>
+<h2>diffie Hellman </h2>
+<label for="p">value of p:</label>
+<input type="text" id="p" required>
+<label for ="q">value of G primmitve root</label>
+<input type="text" id="q" required>
+<label for="pka">Value of private key of user 1</label>
+<input type="text" id="pka" required>
+<label for="pkb">value of private key of user 2</label>
+<input type="text" id="pkb" required>
+<button id="submitButton" onclick="deff()">Submit</button>
+<p>public key of user 1<span id="output1"></p>
+<p>public key of user 2<span id="output2"></p>
+<p>secret key of user 1<span id="output3"></p>
+<p>secret key of user 2<span id="output4"></p>
+</body>
+</html>
