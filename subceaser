@@ -32,6 +32,15 @@ public class CaesarCipher {
  scanner.close();
  }
 }
+
+
+
+
+
+
+
+
+
 b. Substitution cipher
 import java.util.*;
 public class SubstitutionCipher {
