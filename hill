@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String args[]) {
+       int[][] key = {{17,17,5},{21,18,21},{2,2,19}};
+		int[][] ikey = {{4,9,15},{15,17,6},{24,0,17}};
+        int[] pt = new int[3];
+        int[] ct = new int[3];
+        int[] dt = new int[3];
+
+        Scanner sc = new Scanner(System.in);
+        
+        // Input plain text as a string
+        System.out.println("Plain text:");
+        String plaintext = sc.nextLine().toUpperCase();
+
+        // Convert plain text to an array of integers
+        for (int i = 0; i < 3; i++) {
+            pt[i] = plaintext.charAt(i) - 'A';
+        }
+        
+        // Encryption
+        for (int i = 0; i < 3; i++) {
+            ct[i] = 0;
+            for (int j = 0; j < 3; j++) {
+                ct[i] += key[i][j] * pt[j];
+            }
+            ct[i] %= 26;
+        }
+
+        // Display encrypted text
+        String enc = "";
+        for (int i = 0; i < 3; i++) {
+            enc += (char) (ct[i] + 'A');
+        }
+        System.out.println("Encrypted: " + enc);
+
+        // Decryption
+        for (int i = 0; i < 3; i++) {
+            dt[i] = 0;
+            for (int j = 0; j < 3; j++) {
+                dt[i] += ikey[i][j] * ct[j]; // Fix here: use ct[j] instead of ct[i]
+            }
+            dt[i] %= 26;
+        }
+
+        // Display decrypted text
+        String dec = "";
+        for (int i = 0; i < 3; i++) {
+            dec += (char) (dt[i] + 'A');
+        }
+        System.out.println("Decrypted: " + dec);
+    }
+}
